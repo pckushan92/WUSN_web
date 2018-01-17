@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+{% block body %}
+    {#<!-- start: page -->#}
+    {{ form_start(form,{'attr':{'class':'form-horizontal'}}) }}
+    <div class="panel-body">
+        {% for flash_message in app.session.flashBag.get('notice') %}
+            <div class="alert alert-danger">
+                {{ flash_message }}
+            </div>
+        {% endfor %}
+        <div class="form-group">
+            {{ form_label(form.username ,null,{'label_attr':{'class':'col-md-3 control-label'}}) }}
+            <div class="col-md-6">
+                {{ form_widget(form.username,{'attr':{'class':'form-control','placeholder':'Enter username here'}}) }}
+                {{ form_errors(form.username) }}
+            </div>
+        </div>
+        <div class="form-group">
+            {{ form_label(form.password ,null,{'label_attr':{'class':'col-md-3 control-label'}}) }}
+            <div class="col-md-6">
+                {{ form_widget(form.password,{'attr':{'class':'form-control','placeholder':'Enter password here'}}) }}
+                {{ form_errors(form.password) }}
+            </div>
+        </div>
+    </div>
+    <footer class="panel-footer">
+        <div class="row">
+            <div class="col-sm-9 col-sm-offset-7">
+                <a href="{{ path('view_user_list') }}" class="btn btn-info">Cancel</a>
+                {{ form_widget(form.save,{'attr':{'class':'btn btn-primary'}}) }}
+            </div>
+        </div>
+    </footer>
+    {{ form_end(form) }}
+    {#<!-- end: page -->#}
+{% endblock %}

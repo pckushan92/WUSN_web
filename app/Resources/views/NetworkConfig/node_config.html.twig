@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .required
+        {
+            color: darkslategray;
+            font-size: small;
+        }
+    </style>
+
+{% endblock %}
+{% block body %}
+    {#<!-- start: page -->#}
+    <section class="panel">
+        <header class="panel-title" style="background: #80CED7; padding-top: 10px;padding-bottom: 10px;padding-left: 20px">
+            <h2 class="panel-title"><b>Add new App</b></h2>
+        </header>
+        {{ form_start(form,{'attr':{'class':'form-horizontal'}}) }}
+        <div class="panel-body">
+            {% for flash_message in app.session.flashBag.get('notice') %}
+                <div class="alert alert-danger">
+                    {{ flash_message }}
+                </div>
+            {% endfor %}
+            <div class="form-group">
+                {{ form_label(form.appId ,null,{'label_attr':{'class':'col-md-3 control-label'}}) }}
+                <div class="col-md-6">
+                    {{ form_widget(form.appId,{'attr':{'class':'form-control','label':'App ID','value':appIds,'readonly':'readonly'}}) }}
+                    {{ form_errors(form.appId) }}
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form_label(form.appName ,null,{'label_attr':{'class':'col-md-3 control-label'}}) }}
+                <div class="col-md-6">
+                    {{ form_widget(form.appName,{'attr':{'class':'form-control','placeholder':'Enter app name here'}}) }}
+                    {{ form_errors(form.appName) }}
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form_label(form.description ,null,{'label_attr':{'class':'col-md-3 control-label'}}) }}
+                <div class="col-md-6">
+                    {{ form_widget(form.description,{'attr':{'class':'form-control','placeholder':'Enter description here'}}) }}
+                    {{ form_errors(form.description) }}
+                </div>
+            </div>
+        </div>
+        <footer class="panel-footer" style="background-color: white">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-6">
+                    <a href="{{ path('view_app_list') }}" class="btn btn-info" style="width: 100px;background-color: #007EA7">Cancel</a>
+                    {{ form_widget(form.save,{'attr':{'class':'btn btn-primary','style':'background-color: #007EA7;width: 100px'}}) }}
+                </div>
+            </div>
+        </footer>
+        {{ form_end(form) }}
+    </section>
+    {#<!-- end: page -->#}
+{% endblock %}

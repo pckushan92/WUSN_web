@@ -1,0 +1,8 @@
+<h1>Your lucky number is {{ number }}</h1>
+
+{% for i in 1..10 %}
+    <div class="{{ cycle(['even', 'odd'], i) }}">
+        <!-- some HTML here -->
+        {{i}}
+    </div>
+{% endfor %}
