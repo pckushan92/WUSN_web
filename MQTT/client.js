@@ -37,14 +37,13 @@ client.on('connect', function () {
 
             // console.log('string: ',str1+str2);
             s = message.toString();
-            var array = s.split(')');
-            // console.log('sensor data: ', array);
-            // console.log('sensor data: ', message.toString());
 
-            // var sql = "INSERT INTO `sensor_data` (`under_ground_node_id`, `under_ground_node_name`, `vwc`, `temperature`, `central_node_id`, `above_ground_node_id`, `user_id`, `rssi`, `lqi`, `tra`, `trrs`, `trr`, `cra`, `crs`, `crr`, `smr`, `caf`, `af`, `otf`, `rdf`, `tef`, `tte`, `tto`)" +
-            //     " VALUES( 'UGN0000" + array[0] + "', 'Underground Node " + array[0] + "', '" + array[1] + "', '" + array[2] + "', 1, 1,4,'" + array[3] + "','" + array[4] + "','" + array[5] + "','" + array[6] + "','" + array[7] + "','" + array[8] + "','" + array[9] + "','" + array[10] + "','" + array[11] + "','" + array[12] + "','" + array[13] + "','" + array[14] + "','" + array[15] + "', '" + array[16] + "','" + array[17] + "','" + array[18] + "')";
-            var sql = "INSERT INTO `sensor_data` ( `user_id`, `under_ground_node_id`, `vwc`, `rssi`, `lqi`, `tra`, `trrs`, `trr`, `cra`, `crs`, `crr`, `smr`, `caf`, `af`, `otf`, `rdf`, `tef`, `tte`, `tto`, `temperature`)"+
-            "VALUES (4, " + array[0] + ", '" + array[1] + "', '" + array[3] + "','" + array[4] + "','" + array[5] + "','" + array[6] + "','" + array[7] + "','" + array[8] + "','" + array[9] + "','" + array[10] + "','" + array[11] + "','" + array[12] + "','" + array[13] + "','" + array[14] + "','" + array[15] + "', '" + array[16] + "','" + array[17] + "','" + array[18] + "', '" + array[2] + "')";
+            var d = new Date().toLocaleString();
+
+            var array = s.split(')');
+
+            var sql = "INSERT INTO `sensor_data` ( `user_id`, `under_ground_node_id`, `vwc`, `rssi`, `lqi`, `tra`, `trrs`, `trr`, `cra`, `crs`, `crr`, `smr`, `caf`, `af`, `otf`, `rdf`, `tef`, `tte`, `tto`, `temperature`,`datetime`)"+
+            "VALUES (4, " + array[0] + ", '" + array[1] + "', '" + array[3] + "','" + array[4] + "','" + array[5] + "','" + array[6] + "','" + array[7] + "','" + array[8] + "','" + array[9] + "','" + array[10] + "','" + array[11] + "','" + array[12] + "','" + array[13] + "','" + array[14] + "','" + array[15] + "', '" + array[16] + "','" + array[17] + "','" + array[18] + "', '" + array[2] + "','"+d+"')";
 
 
             con.query(sql, function (err, result) {

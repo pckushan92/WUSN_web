@@ -13,6 +13,7 @@ use AppBundle\Entity\Users;
 use AppBundle\Form\UsersForm;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
@@ -84,6 +85,9 @@ class DashboardController extends Controller
             $sensorData=$this->getDoctrine()->getRepository('AppBundle:SensorData')->findBy(
                 array('underGroundNodeId'=>$ugNode)
             );
+            if(empty($sensorData)){
+                continue;
+            }
 
             foreach ($sensorData as $item){
                 $ugnId=$item->getUnderGroundNodeId();
@@ -92,7 +96,12 @@ class DashboardController extends Controller
                 $sensorId =$ugnId->getId();
                 $centalNodeId =$cnId->getCentralNodeId();
                 $aboveGroundNodeId =$agnId->getAboveGroundNodeId();
-                $tempArray[]=$item->getTemperature();
+                $t=$item->getTemperature();
+                $tempArray[]=$t;
+//                $dt=$item->getDatetime();
+//                $strDate=$dt->format('Y-m-d H:i:s');
+//                $strdt= preg_split( "/[- :]/", $strDate );
+//                $datetimeArray[]=["Date.UTC(",$strdt,"),",$t.""];
                 $vwcArray[]=$item->getVwc();
                 $rssiArray[]=$item->getRssi();
                 $lqiArray[]=$item->getLqi();
@@ -130,6 +139,7 @@ class DashboardController extends Controller
             $finalObj->temperatureData =$tempArray;
             $finalObj->vwcData =$vwcArray;
             $finalObj->rssiData =$rssiArray;
+            $finalObj->lqiData =$lqiArray;
             $finalObj->lqiData =$lqiArray;
 
             $dataArray[]=$finalObj;

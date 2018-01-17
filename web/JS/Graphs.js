@@ -10,12 +10,15 @@ function dashboardCharts(path){
     $.getJSON(path, function (result) {
         var sensorId=[];
         var temp = [];
+        // var datetimeTemp = [];
         var vwc = [];
         var rssi = [];
         var lqi = [];
-
+        // console.log(result);
         for(key in result ){
+            // console.log((result));
             temp.push( result[key].temperatureData);
+            // datetimeTemp.push( result[key].datetimeTempData);
             vwc.push( result[key].vwcData);
             rssi.push( result[key].rssiData);
             lqi.push( result[key].lqiData);
@@ -49,6 +52,49 @@ function dashboardCharts(path){
         showRSSILineChart(rssiSeries);
         showLQILineChart(lqiSeries);
     });
+
+    // function showTempLineChart(tempSeries){
+    //     var tempChart =Highcharts.chart('container', {
+    //     chart: {
+    //         type: 'spline'
+    //     },
+    //     title: {
+    //         text: 'Temperature values at Kajukale'
+    //     },
+    //     subtitle: {
+    //         text: 'Irregular time data in Highcharts JS'
+    //     },
+    //     xAxis: {
+    //         type: 'datetime',
+    //         dateTimeLabelFormats: { // don't display the dummy year
+    //             month: '%e. %b',
+    //             year: '%b'
+    //         },
+    //         title: {
+    //             text: 'Date'
+    //         }
+    //     },
+    //     yAxis: {
+    //         title: {
+    //             text: 'Temperature(Celcius)'
+    //         },
+    //         min: 0
+    //     },
+    //     tooltip: {
+    //         headerFormat: '<b>{tempSeries.name}</b><br>',
+    //         pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
+    //     },
+    //
+    //     plotOptions: {
+    //         spline: {
+    //             marker: {
+    //                 enabled: true
+    //             }
+    //         }
+    //     },
+    //
+    //     series: tempSeries
+    // });
 
     function showTempLineChart(tempSeries) {
         var tempChart = Highcharts.chart('container-line-chart-temp', {
@@ -254,141 +300,4 @@ function dashboardCharts(path){
 
         });
     }
-
-
-
-// Create the chart
-//     function showliveChart() {
-//         Highcharts.setOptions({
-//             global: {
-//                 useUTC: false
-//             }
-//         });
-//
-//         var liveChart =Highcharts.stockChart('container', {
-//             chart: {
-//                 events: {
-//                     load: function () {
-//
-//                         // set up the updating of the chart each second
-//                         var series = this.series[0];
-//                         setInterval(function () {
-//                             var x = (new Date()).getTime(), // current time
-//                                 // y = Math.round(Math.random() * 100);
-//                                 y =
-//                             series.addPoint([x, y], true, true);
-//                         }, 1000);
-//                     }
-//                 }
-//             },
-//
-//             rangeSelector: {
-//                 buttons: [{
-//                     count: 1,
-//                     type: 'minute',
-//                     text: '1M'
-//                 }, {
-//                     count: 5,
-//                     type: 'minute',
-//                     text: '5M'
-//                 }, {
-//                     type: 'all',
-//                     text: 'All'
-//                 }],
-//                 inputEnabled: false,
-//                 selected: 0
-//             },
-//
-//             title: {
-//                 text: 'Live random data'
-//             },
-//
-//             exporting: {
-//                 enabled: false
-//             },
-//
-//             series: [{
-//                 name: 'Random data',
-//                 data: (function () {
-//                     // generate an array of random data
-//                     var data = [],
-//                         time = (new Date()).getTime(),
-//                         i;
-//
-//                     for (i = -999; i <= 0; i += 1) {
-//                         data.push([
-//                             time + i * 1000,
-//                             Math.round(Math.random() * 100)
-//                         ]);
-//                     }
-//                     return data;
-//                 }())
-//             }]
-//         });
-//     }
-
-    // var seriesOptions = [],
-    //     seriesCounter = 0,
-    //     names = ['Sensor 1', 'Sensor 2', 'Sensor 3'];
-    //
-    // /**
-    //  * Create the chart when all data is loaded
-    //  * @returns {undefined}
-    //  */
-    // function createChart(path) {
-    //
-    //     Highcharts.stockChart('container', {
-    //
-    //         rangeSelector: {
-    //             selected: 4
-    //         },
-    //
-    //         yAxis: {
-    //             labels: {
-    //                 formatter: function () {
-    //                     return (this.value > 0 ? ' + ' : '') + this.value + '%';
-    //                 }
-    //             },
-    //             plotLines: [{
-    //                 value: 0,
-    //                 width: 2,
-    //                 color: 'silver'
-    //             }]
-    //         },
-    //
-    //         plotOptions: {
-    //             series: {
-    //                 compare: 'percent',
-    //                 showInNavigator: true
-    //             }
-    //         },
-    //
-    //         tooltip: {
-    //             pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
-    //             valueDecimals: 2,
-    //             split: true
-    //         },
-    //
-    //         series: seriesOptions
-    //     });
-    // }
-    //
-    // $.each(names, function (i) {
-    //
-    //     $.getJSON(path,function (data) {
-    //         seriesOptions[i] = {
-    //             name: 'Sensor '+data[i].sensorId,
-    //             data: data[i].temperatureData
-    //         };
-    //
-    //         // As we're loading the data asynchronously, we don't know what order it will arrive. So
-    //         // we keep a counter and create the chart when all the data is loaded.
-    //         seriesCounter += 1;
-    //
-    //         if (seriesCounter === names.length) {
-    //             createChart(path);
-    //             // console.log("inside the print");
-    //         }
-    //     });
-    // });
 }

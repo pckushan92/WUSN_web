@@ -5,7 +5,7 @@
 {% block stylesheets %}
     {{ parent() }}
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    {#<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">#}
 
 
     <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -16,7 +16,7 @@
     {{ parent() }}
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    {#<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>#}
 
     <script type="text/javascript" src="{{ asset('JS/Graphs.js') }}"></script>
     <script >
@@ -35,22 +35,6 @@
 
 {% block inner_body %}
     <div class="container">
-        {#<div class="row" >#}
-            {#<div class="col-sm-6" style="margin-bottom: 20px">#}
-                {#<div id="container-line-chart-temp" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>#}
-            {#</div>#}
-            {#<div class="col-sm-6" style="margin-bottom: 20px">#}
-                {#<div id="container-line-chart-vwc" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>#}
-            {#</div>#}
-        {#</div>#}
-        {#<div class="row">#}
-            {#<div class="col-sm-6" style="margin-bottom: 20px">#}
-                {#<div id="container-line-chart-rssi" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>#}
-            {#</div>#}
-            {#<div class="col-sm-6" style="margin-bottom: 20px">#}
-                {#<div id="container-line-chart-lqi" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>#}
-            {#</div>#}
-        {#</div>#}
 
         <section class="content-header">
             <h1>
@@ -122,9 +106,6 @@
 
         </section>
         <!-- /.content -->
-    </div>
-
-
 
     </div>
 {% endblock %}
