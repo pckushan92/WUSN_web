@@ -10,4 +10,29 @@ namespace AppBundle\Repository;
  */
 class SensorDataRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getLimitedData($ugId,$limit){
+
+        $qb = $this->createQueryBuilder('p');
+
+        $qb->select('p')
+            ->where('p.underGroundNodeId =:ugId')
+            ->setParameter('ugId',$ugId)
+            ->orderBy('p.id','DESC')
+            ->setMaxResults($limit);
+
+        return $qb->getQuery()->getResult();
+
+    }
+
+//    public function getLastUpdatedData(){
+//
+//        $qb = $this->createQueryBuilder('p');
+//
+//        $qb->select('p')
+//            ->orderBy('p.id','DESC')
+//            ->setMaxResults(1);
+//
+//        return $qb->getQuery()->getResult();
+//
+//    }
 }

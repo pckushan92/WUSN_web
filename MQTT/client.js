@@ -29,7 +29,6 @@ client.on('connect', function () {
     // });
 
 
-
     client.on('message', function (topic, message) {
 
         // console.log('collector data: ', message.toString());
@@ -37,19 +36,55 @@ client.on('connect', function () {
 
             // console.log('string: ',str1+str2);
             s = message.toString();
+            console.log("Data:",s);
+
 
             var d = new Date().toLocaleString();
 
             var array = s.split(')');
+            var vwcNo=100-(array[1]/3110)*100;
+            console.log("VWC:",vwcNo);
 
-            var sql = "INSERT INTO `sensor_data` ( `user_id`, `under_ground_node_id`, `vwc`, `rssi`, `lqi`, `tra`, `trrs`, `trr`, `cra`, `crs`, `crr`, `smr`, `caf`, `af`, `otf`, `rdf`, `tef`, `tte`, `tto`, `temperature`,`datetime`)"+
-            "VALUES (4, " + array[0] + ", '" + array[1] + "', '" + array[3] + "','" + array[4] + "','" + array[5] + "','" + array[6] + "','" + array[7] + "','" + array[8] + "','" + array[9] + "','" + array[10] + "','" + array[11] + "','" + array[12] + "','" + array[13] + "','" + array[14] + "','" + array[15] + "', '" + array[16] + "','" + array[17] + "','" + array[18] + "', '" + array[2] + "','"+d+"')";
+            array.pop();
+            function isInt(value) {
+                if (isNaN(value)) {
+                    return false;
+                }
+                var x = parseFloat(value);
+                return (x | 0) === x;
+            }
+            var verifiedCount=0;
+            var verificationConfirmed=false;
+            for (var i in array) {
+                verifiedCount=verifiedCount+1;
+                if (!isInt(array[i])){
+                    verifiedCount=-10;
+                    console.log("Not Verified:");
+                    // console.log(array[i],"NOT OK");
+                    break;
+                    // console.log("V Data :",array[i]);
+                }
+            }
+            if(verifiedCount==19 && array[1]!=0 && array[2]!=0 && array[3]!=0 && array[4]!=0){
+                verificationConfirmed=true;
+            }
+
+            if(verificationConfirmed){
+                console.log("Verified:");
 
 
-            con.query(sql, function (err, result) {
-                if (err) throw err;
-                console.log("1 record inserted");
-            });
+                // console.log("Not Verified Data Array:",array);
+
+
+                var sql = "INSERT INTO `sensor_data` ( `user_id`, `under_ground_node_id`, `vwc`, `rssi`, `lqi`, `tra`, `trrs`, `trr`, `cra`, `crs`, `crr`, `smr`, `caf`, `af`, `otf`, `rdf`, `tef`, `tte`, `tto`, `temperature`,`datetime`)" +
+                    "VALUES (4, " + array[0] + ", '" + vwcNo + "', '" + array[3] + "','" + array[4] + "','" + array[5] + "','" + array[6] + "','" + array[7] + "','" + array[8] + "','" + array[9] + "','" + array[10] + "','" + array[11] + "','" + array[12] + "','" + array[13] + "','" + array[14] + "','" + array[15] + "', '" + array[16] + "','" + array[17] + "','" + array[18] + "', '" + array[2] + "','" + d + "')";
+
+
+                con.query(sql, function (err, result) {
+                    if (err) throw err;
+                    console.log("1 record inserted");
+                });
+            }
         }
     });
 });

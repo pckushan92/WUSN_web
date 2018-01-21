@@ -14,15 +14,36 @@ function dashboardCharts(path){
         var vwc = [];
         var rssi = [];
         var lqi = [];
-        // console.log(result);
+
         for(key in result ){
-            // console.log((result));
-            temp.push( result[key].temperatureData);
-            // datetimeTemp.push( result[key].datetimeTempData);
-            vwc.push( result[key].vwcData);
-            rssi.push( result[key].rssiData);
-            lqi.push( result[key].lqiData);
+            // var lastUpdte=result[key].lastUpdate;
+            // console.log(lastUpdte);
+            // temp.push( result[key].temperatureData);
+            var datetimeresult=result[key].datetimeTempData;
+            // console.log(datetimeresult);
+            var tempT = [];
+            var tempV = [];
+            var tempR = [];
+            var tempL = [];
+            for(key2 in datetimeresult){
+                // console.log("Key:",key2);
+                tempT.push([Date.UTC((datetimeresult[key2])[0],(datetimeresult[key2])[1],(datetimeresult[key2])[2],(datetimeresult[key2])[3],(datetimeresult[key2])[4],(datetimeresult[key2])[5]),(datetimeresult[key2])[6]]);
+                tempV.push([Date.UTC((datetimeresult[key2])[0],(datetimeresult[key2])[1],(datetimeresult[key2])[2],(datetimeresult[key2])[3],(datetimeresult[key2])[4],(datetimeresult[key2])[5]),(datetimeresult[key2])[7]]);
+                tempR.push([Date.UTC((datetimeresult[key2])[0],(datetimeresult[key2])[1],(datetimeresult[key2])[2],(datetimeresult[key2])[3],(datetimeresult[key2])[4],(datetimeresult[key2])[5]),(datetimeresult[key2])[8]]);
+                tempL.push([Date.UTC((datetimeresult[key2])[0],(datetimeresult[key2])[1],(datetimeresult[key2])[2],(datetimeresult[key2])[3],(datetimeresult[key2])[4],(datetimeresult[key2])[5]),(datetimeresult[key2])[9]]);
+
+            }
+            temp.push(tempT);
+            vwc.push(tempV);
+            rssi.push(tempR);
+            lqi.push(tempL);
+            // console.log("Belw:",datetimeTemp);
+            // // vwc.push( result[key].vwcData);
+            // // rssi.push( result[key].rssiData);
+            // // lqi.push( result[key].lqiData);
             sensorId.push('Sensor '+result[key].sensorId);
+
+            // console.log("Date Time Temp",datetimeTemp);
         }
 
         $.each(sensorId, function (i) {
@@ -46,103 +67,136 @@ function dashboardCharts(path){
 
         });
         // createChart(path,sensorId);
-
+        // console.log(tempSeries);
         showTempLineChart(tempSeries);
         showVWCLineChart(vwcSeries);
         showRSSILineChart(rssiSeries);
         showLQILineChart(lqiSeries);
     });
 
-    // function showTempLineChart(tempSeries){
-    //     var tempChart =Highcharts.chart('container', {
-    //     chart: {
-    //         type: 'spline'
-    //     },
-    //     title: {
-    //         text: 'Temperature values at Kajukale'
-    //     },
-    //     subtitle: {
-    //         text: 'Irregular time data in Highcharts JS'
-    //     },
-    //     xAxis: {
-    //         type: 'datetime',
-    //         dateTimeLabelFormats: { // don't display the dummy year
-    //             month: '%e. %b',
-    //             year: '%b'
-    //         },
-    //         title: {
-    //             text: 'Date'
-    //         }
-    //     },
-    //     yAxis: {
-    //         title: {
-    //             text: 'Temperature(Celcius)'
-    //         },
-    //         min: 0
-    //     },
-    //     tooltip: {
-    //         headerFormat: '<b>{tempSeries.name}</b><br>',
-    //         pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
-    //     },
+    // function updateTable(lastUpdte) {
+    //     var myTable = document.getElementById('update_table');
+    //     myTable.rows[0].cells[1].innerHTML = lastUpdte. ;
     //
-    //     plotOptions: {
-    //         spline: {
-    //             marker: {
-    //                 enabled: true
+    // }
+
+    // function showTempLineChart(tempSeries) {
+    //     var tempChart = Highcharts.stockChart('container-line-chart-temp', {
+    //
+    //         title: {
+    //             text: 'Temperature Values'
+    //         },
+    //         subtitle: {
+    //             text: 'Irregular time data in Highcharts JS'
+    //         },
+    //
+    //         yAxis: {
+    //             title: {
+    //                         text: 'Temperature Values (Celcius)'
+    //             },
+    //
+    //             labels: {
+    //                 formatter: function () {
+    //                     return ( this.value);
+    //                 }
+    //             },
+    //             plotLines: [{
+    //                 value: 0,
+    //                 width: 2,
+    //                 color: 'silver'
+    //             }]
+    //         },
+    //
+    //         xAxis: {
+    //             title: {
+    //                 enabled: true,
+    //                 text: 'Date time'
+    //             },
+    //             type: 'datetime',
+    //
+    //             dateTimeLabelFormats : {
+    //                 hour: '%I %p',
+    //                 minute: '%I:%M %p'
     //             }
-    //         }
-    //     },
+    //         },
     //
-    //     series: tempSeries
-    // });
+    //         plotOptions: {
+    //             series: {
+    //                 compare: 'percentage',
+    //                 showInNavigator: true
+    //             }
+    //         },
+    //         tooltip: {
+    //             pointFormat: '<span style="color:{series.color}">{tempSeries.name}</span>: <b>({point.y}Celcius)</b><br/>',
+    //             valueDecimals: 2,
+    //             split: true
+    //         },
+    //
+    //         series:  tempSeries
+    //
+    //     });
+    //
+    // }
+
+
+    //.............................................................
+
 
     function showTempLineChart(tempSeries) {
         var tempChart = Highcharts.chart('container-line-chart-temp', {
 
+            chart: {
+                type: 'spline'
+            },
             title: {
-                text: 'Temperature Data'
+                text: 'Temperature Values'
             },
-
             subtitle: {
-                text: '@Sensor temperature data '
+                text: '@Sensor Temperature'
             },
-
             yAxis: {
                 title: {
                     text: 'Temperature Values (Celcius)'
                 }
-            },
-            legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'middle'
+
             },
 
-            plotOptions: {
-                series: {
-                    label: {
-                        connectorAllowed: false
-                    },
-                    pointStart: 10
+            xAxis: {
+                title: {
+                    enabled: true,
+                    text: 'Date time'
+                },
+                type: 'datetime',
+
+                dateTimeLabelFormats : {
+                    hour: '%I %p',
+                    minute: '%I:%M %p'
                 }
             },
+            // legend: {
+            //     layout: 'vertical',
+            //     align: 'right',
+            //     verticalAlign: 'middle'
+            // },
 
-            series:  tempSeries,
-
-            responsive: {
-                rules: [{
-                    condition: {
-                        maxWidth: 500
-                    },
-                    chartOptions: {
-                        legend: {
-                            layout: 'horizontal',
-                            align: 'center',
-                            verticalAlign: 'bottom'
-                        }
+            plotOptions: {
+                series:{
+                    marker: {
+                        fillColor: '#FFFFFF',
+                        lineWidth: 2,
+                        lineColor: null // inherit from series
                     }
-                }]
-            }
+                }
+
+            },
+
+            tooltip: {
+                pointFormat: '<span style="color:{series.color}">{tempSeries.name}</span>: <b>({point.y}Celcius)</b><br/>',
+                valueDecimals: 2,
+                split: true
+            },
+
+            series:  tempSeries
 
         });
 
@@ -151,50 +205,55 @@ function dashboardCharts(path){
     function showVWCLineChart(vwcSeries) {
         var vwcChart = Highcharts.chart('container-line-chart-vwc', {
 
-            title: {
-                text: 'VWC Data'
+            chart: {
+                type: 'spline'
             },
-
+            title: {
+                text: 'VWC Values'
+            },
             subtitle: {
                 text: '@Sensor Volumetric Water Content'
             },
-
             yAxis: {
                 title: {
-                    text: 'VWC Values (%)'
+                    text: 'Volumetric Water Content (%)'
+                }
+
+            },
+            xAxis: {
+                title: {
+                    enabled: true,
+                    text: 'Date time'
+                },
+                type: 'datetime',
+
+                dateTimeLabelFormats : {
+                    hour: '%I %p',
+                    minute: '%I:%M %p'
                 }
             },
-            legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'middle'
-            },
+            // legend: {
+            //     layout: 'vertical',
+            //     align: 'right',
+            //     verticalAlign: 'middle'
+            // },
 
             plotOptions: {
-                series: {
-                    label: {
-                        connectorAllowed: false
-                    },
-                    pointStart: 10
+                series:{
+                    marker: {
+                        fillColor: '#FFFFFF',
+                        lineWidth: 2,
+                        lineColor: null // inherit from series
+                    }
                 }
             },
+            tooltip: {
+                pointFormat: '<span style="color:{series.color}">{vwcSeries.name}</span>: <b>({point.y}%)</b><br/>',
+                valueDecimals: 2,
+                split: true
+            },
 
-            series: vwcSeries,
-
-            responsive: {
-                rules: [{
-                    condition: {
-                        maxWidth: 500
-                    },
-                    chartOptions: {
-                        legend: {
-                            layout: 'horizontal',
-                            align: 'center',
-                            verticalAlign: 'bottom'
-                        }
-                    }
-                }]
-            }
+            series:  vwcSeries
 
         });
     }
@@ -202,50 +261,55 @@ function dashboardCharts(path){
     function showRSSILineChart(rssiSeries) {
         var rssiChart = Highcharts.chart('container-line-chart-rssi', {
 
-            title: {
-                text: 'RSSI Data'
+            chart: {
+                type: 'spline'
             },
-
+            title: {
+                text: 'RSSI Values'
+            },
             subtitle: {
                 text: '@Sensor Received Signal Strength Indicator'
             },
-
             yAxis: {
                 title: {
-                    text: 'RSSI Values (decibel)'
+                    text: 'Received Signal Strength Indicator(dBm)'
+                }
+
+            },
+            xAxis: {
+                title: {
+                    enabled: true,
+                    text: 'Date time'
+                },
+                type: 'datetime',
+
+                dateTimeLabelFormats : {
+                    hour: '%I %p',
+                    minute: '%I:%M %p'
                 }
             },
-            legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'middle'
-            },
+            // legend: {
+            //     layout: 'vertical',
+            //     align: 'right',
+            //     verticalAlign: 'middle'
+            // },
 
             plotOptions: {
-                series: {
-                    label: {
-                        connectorAllowed: false
-                    },
-                    pointStart: 10
+                series:{
+                    marker: {
+                        fillColor: '#FFFFFF',
+                        lineWidth: 2,
+                        lineColor: null // inherit from series
+                    }
                 }
             },
+            tooltip: {
+                pointFormat: '<span style="color:{series.color}">{rssiSeries.name}</span>: <b>({point.y}dBm)</b><br/>',
+                valueDecimals: 2,
+                split: true
+            },
 
-            series: rssiSeries,
-
-            responsive: {
-                rules: [{
-                    condition: {
-                        maxWidth: 500
-                    },
-                    chartOptions: {
-                        legend: {
-                            layout: 'horizontal',
-                            align: 'center',
-                            verticalAlign: 'bottom'
-                        }
-                    }
-                }]
-            }
+            series:  rssiSeries
 
         });
     }
@@ -253,51 +317,57 @@ function dashboardCharts(path){
     function showLQILineChart(lqiSeries) {
         var lqiChart = Highcharts.chart('container-line-chart-lqi', {
 
-            title: {
-                text: 'LQI Data'
+            chart: {
+                type: 'spline'
             },
-
+            title: {
+                text: 'LQI Values'
+            },
             subtitle: {
                 text: '@Sensor Link Quality Indicator'
             },
-
             yAxis: {
                 title: {
-                    text: 'LQI Values (decibel)'
+                    text: 'Link Quality Indicator'
+                }
+
+            },
+            xAxis: {
+                title: {
+                    enabled: true,
+                    text: 'Date time'
+                },
+                type: 'datetime',
+
+                dateTimeLabelFormats : {
+                    hour: '%I %p',
+                    minute: '%I:%M %p'
                 }
             },
-            legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'middle'
-            },
+            // legend: {
+            //     layout: 'vertical',
+            //     align: 'right',
+            //     verticalAlign: 'middle'
+            // },
 
             plotOptions: {
-                series: {
-                    label: {
-                        connectorAllowed: false
-                    },
-                    pointStart: 10
+                series:{
+                    marker: {
+                        fillColor: '#FFFFFF',
+                        lineWidth: 2,
+                        lineColor: null // inherit from series
+                    }
                 }
             },
+            tooltip: {
+                pointFormat: '<span style="color:{series.color}">{lqiSeries.name}</span>: <b>({point.y})</b><br/>',
+                valueDecimals: 2,
+                split: true
+            },
 
-            series: lqiSeries,
-
-            responsive: {
-                rules: [{
-                    condition: {
-                        maxWidth: 500
-                    },
-                    chartOptions: {
-                        legend: {
-                            layout: 'horizontal',
-                            align: 'center',
-                            verticalAlign: 'bottom'
-                        }
-                    }
-                }]
-            }
+            series:  lqiSeries
 
         });
     }
+
 }

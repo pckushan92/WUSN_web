@@ -8,7 +8,13 @@
     {#<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">#}
 
 
-    <script src="https://code.highcharts.com/highcharts.js"></script>
+
+
+    {#<script src="https://code.highcharts.com/highcharts.js"></script>#}
+
+    {#<script src="https://code.highcharts.com/modules/series-label.js"></script>#}
+    {#<script src="https://code.highcharts.com/modules/exporting.js"></script>#}
+
 
 {% endblock %}
 
@@ -16,18 +22,69 @@
     {{ parent() }}
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    {#<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>#}
+
+    {#<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>#}
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
 
     <script type="text/javascript" src="{{ asset('JS/Graphs.js') }}"></script>
     <script >
+
         $(function(){
+
             dataAPICall();
+            updateTable();
             setInterval(dataAPICall, 10000);
+            setInterval(updateTable, 10000);
 
             function dataAPICall() {
                 dashboardCharts("{{ path('get_data') }}");
             }
+            function updateTable() {
 
+                $.getJSON("{{ path('get_last_update')}}", function (result) {
+//                    console.log("**************");
+                    console.log(result);
+                var update_table=$('#update_table');
+                var count=0;
+                $.each(result,function(index){
+
+//                    console.log("%%%%%%%%%%%%");
+//                    console.log(result[index]);
+//                    console.log("%%%%%%%%%%%%%");
+//                    update_table.append($('<tr><td style="text-align: center"></td>').text(result[index].sensorId),'<td style="text-align: center"></td>').text(result[index].temperature),<td style="text-align: center"></td>').text(result[index].vwc),</tr>'))
+                    if(count ==0){
+//
+                        $('#ugn1').text(result[index].sensorId);
+                        $('#temp1').text(result[index].temperature);
+                        $('#vwc1').text(result[index].vwc);
+                        $('#rssi1').text(result[index].rssi);
+                        $('#lqi1').text(result[index].lqi);
+                    }
+                    else if(count ==1){
+
+                        $('#ugn2').text(result[index].sensorId);
+                        $('#temp2').text(result[index].temperature);
+                        $('#vwc2').text(result[index].vwc);
+                        $('#rssi2').text(result[index].rssi);
+                        $('#lqi2').text(result[index].lqi);
+                    }
+                    else if(count==2){
+                        $('#ugn3').text(result[index].sensorId);
+                        $('#temp3').text(result[index].temperature);
+                        $('#vwc3').text(result[index].vwc);
+                        $('#rssi3').text(result[index].rssi);
+                        $('#lqi3').text(result[index].lqi);
+                    }
+                    count=count+1;
+
+                })
+
+                });
+            }
         });
 
     </script>
@@ -42,17 +99,62 @@
                 <small>all data from sensors</small>
             </h1>
         </section>
+        <div class="col-md-12" style="margin-top: 10px">
+            <div class="box box-danger container">
+                <table id="update_table" class="table" style="background-color: white">
 
+                    <thead>
+                    <tr colspan="5"><th colspan="5" style="font-size: large">Latest Data</th></tr>
+                    <tr class="table-heads ">
+                        {#<th class="agn" style="text-align: center">Aboveground Node</th>#}
+                        <th class="ugn " style="text-align: center">Underground Node</th>
+                        <th class="temp" style="text-align: center">Temperature(Celcius)</th>
+                        <th class="vwc " style="text-align: center">VWC(%)</th>
+                        <th class="rssi" style="text-align: center">RSSI(dBm)</th>
+                        <th class="lqi" style="text-align: center">LQI</th>
+                    </tr>
+
+                    </thead>
+                    <tbody>
+                        <tr id="first">
+                            {#<td style="text-align: center" id="agn"></td>#}
+                            <td style="text-align: center"id="ugn1"></td>
+                            <td style="text-align: center" id="temp1"></td>
+                            <td style="text-align: center"id="vwc1"></td>
+                            <td style="text-align: center"id="rssi1"></td>
+                            <td style="text-align: center"id="lqi1"></td>
+                        </tr>
+                        <tr id="second">
+                            <td style="text-align: center"id="ugn2"></td>
+                            <td style="text-align: center" id="temp2"></td>
+                            <td style="text-align: center"id="vwc2"></td>
+                            <td style="text-align: center"id="rssi2"></td>
+                            <td style="text-align: center"id="lqi2"></td>
+                        </tr>
+                        <tr id="third">
+                            <td style="text-align: center"id="ugn3"></td>
+                            <td style="text-align: center" id="temp3"></td>
+                            <td style="text-align: center"id="vwc3"></td>
+                            <td style="text-align: center"id="rssi3"></td>
+                            <td style="text-align: center"id="lqi3"></td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+
+                    </tfoot>
+                </table>
+            </div>
+        </div>
         <!-- Main content -->
         <section class="content">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <!-- AREA CHART -->
                     <div class="box box-primary">
                         <div class="box-body">
-                            <div class="chart" >
+                            <div class="chart col-md-10" >
                                 {#<canvas id="container-line-chart-temp" style="height:250px"></canvas>#}
-                                <div id="container-line-chart-temp" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+                                <div id="container-line-chart-temp" style="min-width: 310px; height: 400px; max-width: 1000px; margin: 0 auto" ></div>
                             </div>
                         </div>
                         <!-- /.box-body -->
@@ -63,7 +165,7 @@
                     <div class="box box-danger">
                         <div class="box-body" >
                             {#<canvas id="container-line-chart-vwc" style="height:250px"></canvas>#}
-                            <div id="container-line-chart-vwc" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+                            <div id="container-line-chart-vwc" style="min-width: 310px; height: 400px; max-width: 1000px; margin: 0 auto"></div>
                         </div>
 
                         <!-- /.box-body -->
@@ -72,14 +174,14 @@
 
                 </div>
                 <!-- /.col (LEFT) -->
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <!-- LINE CHART -->
                     <div class="box box-info">
 
                         <div class="box-body">
                             <div class="chart" >
                                 {#<canvas id="container-line-chart-rssi" style="height:250px"></canvas>#}
-                                <div id="container-line-chart-rssi" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+                                <div id="container-line-chart-rssi" style="min-width: 310px; height: 400px; max-width: 1000px; margin: 0 auto"></div>
                             </div>
                         </div>
                         <!-- /.box-body -->
@@ -92,7 +194,7 @@
                         <div class="box-body">
                             <div class="chart" >
                                 {#<canvas id="container-line-chart-lqi" style="height:230px"></canvas>#}
-                                <div id="container-line-chart-lqi" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+                                <div id="container-line-chart-lqi" style="min-width: 310px; height: 400px; max-width: 1000px; margin: 0 auto"></div>
                             </div>
                         </div>
                         <!-- /.box-body -->

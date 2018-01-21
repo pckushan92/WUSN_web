@@ -22,12 +22,68 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/api/getdata", name="get_data")
+     * @Route("/api/getupdate", name="get_last_update")
      */
-    public function getDataAction(){
+    public function getLastUpdateAction(){
+
         $connectedUGNodes=array();
 
         $allUGNodes=$this->getDoctrine()->getRepository('AppBundle:UGNode')->findAll();
+
+
+        foreach ($allUGNodes as $ugnodes){
+            $ugNodeId=$ugnodes->getId();
+            $tempId=$this->getDoctrine()->getRepository('AppBundle:SensorData')->findOneBy(
+                array('underGroundNodeId'=>$ugNodeId)
+            );
+            if($tempId!=null){
+                $connectedUGNodes[]=$tempId;
+            }
+        }
+
+        $dataArray=[];
+        $count =0;
+
+        foreach ($connectedUGNodes as $items){
+
+
+            $ugId=$items->getUnderGroundNodeId();
+            $ugNode=$ugId->getId();
+            $count+=1;
+            $finalObj = new \stdClass();
+
+
+            $lastUpdate=$this->getDoctrine()->getRepository('AppBundle:SensorData')->getLimitedData($ugNode,1);
+            foreach ($lastUpdate as $item){
+
+//
+                $tts=($item->getUnderGroundNodeId());
+                $sensorIds =$tts->getId();
+                $finalObj->sensorId = $sensorIds;
+                $finalObj->temperature = $item->getTemperature();
+                $finalObj->vwc = $item->getVwc();
+                $finalObj->rssi= $item->getRssi();
+                $finalObj->lqi= $item->getLqi();
+                $finalObj->datetime = $item->getDatetime();
+
+            }
+
+            $dataArray[]=$finalObj;
+        }
+        return new JsonResponse($dataArray);
+    }
+
+
+    /**
+     * @Route("/api/getdata", name="get_data")
+     */
+    public function getDataAction(){
+
+        $connectedUGNodes=array();
+
+        $allUGNodes=$this->getDoctrine()->getRepository('AppBundle:UGNode')->findAll();
+
+
         foreach ($allUGNodes as $ugnodes){
             $ugNodeId=$ugnodes->getId();
             $tempId=$this->getDoctrine()->getRepository('AppBundle:SensorData')->findOneBy(
@@ -56,10 +112,12 @@ class DefaultController extends Controller
 
             $finalObj = new \stdClass();
 //            $ugNode= $items->getId();
-            $sensorData=$this->getDoctrine()->getRepository('AppBundle:SensorData')->findBy(
-                array('underGroundNodeId'=>$ugNode)
-            );
-
+//            $sensorData=$this->getDoctrine()->getRepository('AppBundle:SensorData')->findBy(
+//                array('underGroundNodeId'=>$ugNode)
+//            );
+            $sensorData=$this->getDoctrine()->getRepository('AppBundle:SensorData')->getLimitedData($ugNode,20);
+//            $lastUpdate=$this->getDoctrine()->getRepository('AppBundle:SensorData')->getLimitedData($ugNode,1);
+            $sensorData=array_reverse($sensorData);
             foreach ($sensorData as $item){
                 $tt=($item->getUnderGroundNodeId());
                 $sensorId =$tt->getId();
@@ -76,11 +134,15 @@ class DefaultController extends Controller
                 foreach ($strdt as $value)
                     $intArray [] = intval ($value);
 
-                $vwcArray[]=$item->getVwc();
-                $rssiArray[]=$item->getRssi();
-                $lqiArray[]=$item->getLqi();
+//                $vwcArray[]=$item->getVwc();
+//                $rssiArray[]=$item->getRssi();
+//                $lqiArray[]=$item->getLqi();
 
                 $intArray[6]=$t;
+                $intArray[7]=$item->getVwc();
+                $intArray[8]=$item->getRssi();
+                $intArray[9]=$item->getLqi();
+
                 $datetimeTempArray[]=$intArray;
 
                 $sensorDataArray = new \stdClass();
@@ -108,7 +170,6 @@ class DefaultController extends Controller
                 $sensorDataArray->tte= $item->getTte();
                 $sensorDataArray->tto= $item->getTto();
 
-
             }
             $finalObj->sensorId = $sensorId;
             $finalObj->sensorData = $sensorDataArray;
@@ -118,11 +179,11 @@ class DefaultController extends Controller
             $finalObj->rssiData =$rssiArray;
             $finalObj->lqiData =$lqiArray;
             $finalObj->datetimeTempData =$datetimeTempArray;
+//            $finalObj->lastUpdate =$lastUpdate;
 
             $dataArray[]=$finalObj;
-//            var_dump($datetimeTempArray);
+//            var_dump($lastUpdateArray);
         }
-
 
         return new JsonResponse($dataArray);
     }
